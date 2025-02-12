@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 
 // Classe responsável pela criação da tela
@@ -20,6 +21,8 @@ class _TelaAstrosState extends State<TelaAstros> {
   final TextEditingController _distanciaController = TextEditingController();
   final TextEditingController _apelidoController = TextEditingController();
 
+  // Instância inicializada da classe de controle
+  final ControleAstros _controleAstros = ControleAstros();
   // Instância inicializada da classe Astros para armazenar os dados
   final Astros _astros = Astros.vazio();
 

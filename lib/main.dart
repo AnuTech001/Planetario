@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:planetario/modelos/astros.dart';
 import 'package:planetario/telas/tela_astros.dart';
 
 void main() {
@@ -20,7 +19,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // Define a página inicial do aplicativo
-      home: const TelaAstros(),
+      home: const MyHomePage(
+        title: 'Cadastro',
+      ),
     );
   }
 }
@@ -38,13 +39,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Astros _astros = Astros(
-    id: '',
-    nome: 'Terra',
-    tamanho: 12742.0,
-    distancia: 149600000.0,
-    apelido: 'O Planeta Azul',
-  );
+  TelaAstros _telaAstros = TelaAstros();
 
   @override
   Widget build(BuildContext context) {
@@ -58,27 +53,22 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Dados do planeta:',
-            ),
-            Text(
-              'Nome: ${_astros.nome}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              'Tamanho: ${_astros.tamanho} km',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              'Distância: ${_astros.distancia} km',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              'Apelido: ${_astros.apelido}',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Planetas',
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _incluirAstro(context);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
+  }
+
+  void _incluirAstro(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => _telaAstros));
   }
 }
