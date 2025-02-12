@@ -42,19 +42,24 @@ class _TelaAstrosState extends State<TelaAstros> {
     super.dispose();
   }
 
-  // Função para submeter o formulário
+  Future<void> _inserirAstro() async {
+    _astros.nome = _nomeController.text;
+    _astros.tamanho = double.parse(_tamanhoController.text);
+    _astros.distancia = double.parse(_distanciaController.text);
+    _astros.apelido = _apelidoController.text;
+    await _controleAstros.inserirAstro(_astros);
+  }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      _inserirAstro();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Dados cadastrados com sucesso!\n'
-              '${_astros.nome}\n'
-              '${_astros.tamanho}\n'
-              '${_astros.distancia}\n'
-              '${_astros.apelido}'),
+        const SnackBar(
+          content: Text('Dados cadastrados com sucesso!'),
         ),
       );
+      Navigator.of(context).pop(); // Adicionado parênteses aqui
     }
   }
 
@@ -63,7 +68,7 @@ class _TelaAstrosState extends State<TelaAstros> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Cadastrar Planetas'),
+        title: const Text('Cadastrar Astro'),
         elevation: 3,
       ),
       body: Padding(

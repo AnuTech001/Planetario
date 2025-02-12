@@ -39,8 +39,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TelaAstros _telaAstros = TelaAstros();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Planetas',
+              '''
+            Saudações usúario,
+            Esse é um pequeno APP criado para 
+            o meu curso Talento Tech. 😁
+            ''',
             ),
           ],
         ),
@@ -69,6 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incluirAstro(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => _telaAstros));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TelaAstros(),
+      ),
+    );
   }
 }

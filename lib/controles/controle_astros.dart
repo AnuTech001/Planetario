@@ -1,7 +1,8 @@
+import 'package:planetario/modelos/astros.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-// Clase de controle do programa
+// Classe de controle do programa
 class ControleAstros {
   static Database? _bd;
 
@@ -23,14 +24,22 @@ class ControleAstros {
 
   Future<void> _criarBD(Database bd, int versao) async {
     const sql = '''
-  CREATE TABLE planetas (
-    id INTER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    tamanho REAL NOT NULL,
-    distancia REAL NOT NUL,
-    apelido TEXT
-  );
-  ''';
+      CREATE TABLE planetas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        tamanho REAL NOT NULL,
+        distancia REAL NOT NULL,
+        apelido TEXT
+      );
+    ''';
     await bd.execute(sql);
+  }
+
+  Future<int> inserirAstro(Astros astro) async {
+    final db = await bd;
+    return await db.insert(
+      'astros',
+      astro.toMap(),
+    );
   }
 }
