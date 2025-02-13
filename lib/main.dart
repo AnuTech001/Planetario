@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       ),
       // Define a página inicial do aplicativo
       home: const MyHomePage(
-        title: 'Cadastro',
+        title: 'Meu Planetário',
       ),
     );
   }
