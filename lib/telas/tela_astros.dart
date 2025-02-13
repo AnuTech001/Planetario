@@ -166,7 +166,9 @@ class _TelaAstrosState extends State<TelaAstros> {
                 // Botão para submeter o formulário
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: const Text('Cadastrar'),
+                  child: Icon(
+                    Icons.add_outlined,
+                  ),
                 ),
               ],
             ),
