@@ -87,9 +87,23 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar exclusão'),
-          content: Text(
-            'Você tem certeza que deseja excluir o astro ${astro.nome}?',
+          title: Center(),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.warning_outlined,
+                size: 48,
+                color: Colors.red,
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: Text(
+                  'Você tem certeza que deseja excluir o astro ${astro.nome}?',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -101,14 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               child: Text('Excluir'),
               onPressed: () {
-                _excluirAstro(
-                  int.parse(astro.id!),
-                );
+                _excluirAstro(int.parse(astro.id!));
                 Navigator.of(context).pop();
                 if (kDebugMode) {
-                  print(
-                    'Astro excluído: ${astro.id}',
-                  );
+                  print('Astro excluído: ${astro.id}');
                 }
               },
             ),
