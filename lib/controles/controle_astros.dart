@@ -76,4 +76,13 @@ class ControleAstros {
       astro.toMap(),
     );
   }
+
+  // Excluir astro da tabela
+  Future<int> excluirAstro(int id) async {
+    final db = await bd;
+    if (kDebugMode) {
+      print("Excluindo astro com id: $id");
+    }
+    return await db.delete('astros', where: 'id = ?', whereArgs: [id]);
+  }
 }

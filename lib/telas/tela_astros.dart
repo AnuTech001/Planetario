@@ -1,10 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 
 class TelaAstros extends StatefulWidget {
-  const TelaAstros({super.key});
+  final Function() onData;
+  const TelaAstros({
+    super.key,
+    required this.onData,
+  });
 
   @override
   State<TelaAstros> createState() => _TelaAstrosState();
@@ -63,6 +69,7 @@ class _TelaAstrosState extends State<TelaAstros> {
           ),
         );
         Navigator.of(context).pop(); // Navegar de volta para a tela principal
+        widget.onData();
         if (kDebugMode) {
           // Log para verificar a navegação de volta
           print('Navegando de volta para a tela principal após cadastro.');

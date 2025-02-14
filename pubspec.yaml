@@ -2,7 +2,7 @@ name: planetario
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 2.1.2-alpha+1
+version: 2.2.2-alpha+1
 
 environment:
   sdk: '>=3.6.0 <4.0.0'

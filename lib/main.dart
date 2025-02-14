@@ -5,7 +5,9 @@ import 'package:planetario/modelos/astros.dart';
 import 'package:planetario/telas/tela_astros.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -36,7 +38,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // ControleAstros controla a leitura e escrita de dados sobre os astros
   final ControleAstros _controleAstros = ControleAstros();
   List<Astro> _astros = [];
 
@@ -46,32 +47,75 @@ class _MyHomePageState extends State<MyHomePage> {
     _lerAstros();
   }
 
-  // Lê os dados dos astros e atualiza a lista de astros
   Future<void> _lerAstros() async {
     final resultado = await _controleAstros.lerAstros();
     setState(() {
       _astros = resultado;
       if (kDebugMode) {
-        // Exibir os dados lidos no console para controle
-        print('Dados lidos: $_astros');
+        print(
+          'Dados lidos: $_astros',
+        );
       }
     });
   }
 
-  // Navega para a tela de inclusão de astros e recarrega a lista após a inserção
   void _incluirAstro(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const TelaAstros(),
+        builder: (context) => TelaAstros(
+          onData: () {},
+        ),
       ),
     ).then((value) {
-      _lerAstros(); // Recarregar a lista de astros após inserir um novo astro
+      _lerAstros();
       if (kDebugMode) {
-        // Exibir mensagem no console após a inserção de um novo astro
-        print('Novo astro incluído e lista recarregada.');
+        print(
+          'Novo astro incluído e lista recarregada.',
+        );
       }
     });
+  }
+
+  void _excluirAstro(int id) async {
+    await _controleAstros.excluirAstro(id);
+    _lerAstros();
+  }
+
+  void _confirmarExclusao(BuildContext context, Astro astro) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar exclusão'),
+          content: Text(
+            'Você tem certeza que deseja excluir o astro ${astro.nome}?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Excluir'),
+              onPressed: () {
+                _excluirAstro(
+                  int.parse(astro.id!),
+                );
+                Navigator.of(context).pop();
+                if (kDebugMode) {
+                  print(
+                    'Astro excluído: ${astro.id}',
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -82,20 +126,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
-        // Exibir o número de astros no console
         itemCount: _astros.length,
         itemBuilder: (context, index) {
           final astro = _astros[index];
-          // Exibir informações sobre cada astro no console
           if (kDebugMode) {
             print(
-              'Exibindo astro: ${astro.nome}${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido
+              'Exibindo astro: ${astro.nome}\nDistância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido!}',
             );
           }
           return ListTile(
             title: Text(astro.nome),
             subtitle: Text(
-              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido}',
+              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido!}',
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _confirmarExclusao(context, astro),
             ),
           );
         },
