@@ -1,13 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 import 'package:planetario/telas/tela_astros.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final controleAstros = ControleAstros();
-  await controleAstros
-      .deletarBancoDeDados(); // Adicione isso temporariamente para recriar o banco
+void main() {
   runApp(const MyApp());
 }
 
@@ -39,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // ControleAstros controla a leitura e escrita de dados sobre os astros
   final ControleAstros _controleAstros = ControleAstros();
   List<Astro> _astros = [];
 
@@ -48,14 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
     _lerAstros();
   }
 
+  // Lê os dados dos astros e atualiza a lista de astros
   Future<void> _lerAstros() async {
     final resultado = await _controleAstros.lerAstros();
     setState(() {
       _astros = resultado;
-      print('Dados lidos: $_astros');
+      if (kDebugMode) {
+        // Exibir os dados lidos no console para controle
+        print('Dados lidos: $_astros');
+      }
     });
   }
 
+  // Navega para a tela de inclusão de astros e recarrega a lista após a inserção
   void _incluirAstro(BuildContext context) {
     Navigator.push(
       context,
@@ -64,6 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ).then((value) {
       _lerAstros(); // Recarregar a lista de astros após inserir um novo astro
+      if (kDebugMode) {
+        // Exibir mensagem no console após a inserção de um novo astro
+        print('Novo astro incluído e lista recarregada.');
+      }
     });
   }
 
@@ -75,13 +82,21 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
+        // Exibir o número de astros no console
         itemCount: _astros.length,
         itemBuilder: (context, index) {
           final astro = _astros[index];
+          // Exibir informações sobre cada astro no console
+          if (kDebugMode) {
+            print(
+              'Exibindo astro: ${astro.nome}${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido
+            );
+          }
           return ListTile(
             title: Text(astro.nome),
             subtitle: Text(
-                'Distância: ${astro.distancia} km\nCircunferência: ${astro.tamanho} km'),
+              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido}',
+            ),
           );
         },
       ),

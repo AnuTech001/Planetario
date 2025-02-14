@@ -6,7 +6,7 @@ class Astro {
   double distancia; // Distância do astro em relação à sua estrela
   String? apelido; // Apelido: Nome alternativo para o astro
 
-  // Construtor de classe Astros
+  // Construtor da classe Astro
   Astro({
     this.id,
     required this.nome,
@@ -22,6 +22,7 @@ class Astro {
         distancia = 0.0,
         apelido = '';
 
+  // Criação de um objeto Astro a partir de um mapa de dados
   factory Astro.fromMap(Map<String, dynamic> map) {
     return Astro(
       id: map['id']?.toString(), // Converte o ID para String
@@ -32,6 +33,7 @@ class Astro {
     );
   }
 
+  // Conversão do objeto Astro para um mapa de dados
   Map<String, dynamic> toMap() {
     return {
       'id': id,

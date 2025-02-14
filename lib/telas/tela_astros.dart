@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
@@ -10,11 +11,16 @@ class TelaAstros extends StatefulWidget {
 }
 
 class _TelaAstrosState extends State<TelaAstros> {
+  // Chave global para o formulário
   final _formKey = GlobalKey<FormState>();
+
+  // Controladores para os campos de texto
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _tamanhoController = TextEditingController();
   final TextEditingController _distanciaController = TextEditingController();
   final TextEditingController _apelidoController = TextEditingController();
+
+  // Instância do controle de astros e do modelo de astro
   final ControleAstros _controleAstros = ControleAstros();
   final Astro _astros = Astro.vazio();
 
@@ -25,6 +31,7 @@ class _TelaAstrosState extends State<TelaAstros> {
 
   @override
   void dispose() {
+    // Dispor dos controladores ao descartar o widget
     _nomeController.dispose();
     _tamanhoController.dispose();
     _distanciaController.dispose();
@@ -32,16 +39,20 @@ class _TelaAstrosState extends State<TelaAstros> {
     super.dispose();
   }
 
+  // Método para inserir um astro no banco de dados
   Future<void> _inserirAstro() async {
     _astros.nome = _nomeController.text;
     _astros.tamanho = double.parse(_tamanhoController.text);
     _astros.distancia = double.parse(_distanciaController.text);
     _astros.apelido = _apelidoController.text;
     await _controleAstros.inserirAstro(_astros);
-    print(
-        'Astro inserido: ${_astros.toMap()}'); // Adicionando um log para verificação
+    if (kDebugMode) {
+      // Log para verificação dos dados inseridos
+      print('Astro inserido: ${_astros.toMap()}');
+    }
   }
 
+  // Método para submeter o formulário
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -52,6 +63,10 @@ class _TelaAstrosState extends State<TelaAstros> {
           ),
         );
         Navigator.of(context).pop(); // Navegar de volta para a tela principal
+        if (kDebugMode) {
+          // Log para verificar a navegação de volta
+          print('Navegando de volta para a tela principal após cadastro.');
+        }
       });
     }
   }
