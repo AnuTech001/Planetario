@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 
-// Classe responsável pela criação da tela
 class TelaAstros extends StatefulWidget {
   const TelaAstros({super.key});
 
@@ -10,31 +9,22 @@ class TelaAstros extends StatefulWidget {
   State<TelaAstros> createState() => _TelaAstrosState();
 }
 
-// Estado da classe TelaAstros
 class _TelaAstrosState extends State<TelaAstros> {
-  // Chave global do formulário para validação
   final _formKey = GlobalKey<FormState>();
-
-  // Controladores de texto para capturar os dados do usuário
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _tamanhoController = TextEditingController();
   final TextEditingController _distanciaController = TextEditingController();
   final TextEditingController _apelidoController = TextEditingController();
-
-  // Instância inicializada da classe de controle
   final ControleAstros _controleAstros = ControleAstros();
-  // Instância inicializada da classe Astros para armazenar os dados
-  final Astros _astros = Astros.vazio();
+  final Astro _astros = Astro.vazio();
 
   @override
   void initState() {
-    // Inicializa os controladores de texto, caso necessário
     super.initState();
   }
 
   @override
   void dispose() {
-    // Libera os recursos dos controladores de texto
     _nomeController.dispose();
     _tamanhoController.dispose();
     _distanciaController.dispose();
@@ -48,18 +38,21 @@ class _TelaAstrosState extends State<TelaAstros> {
     _astros.distancia = double.parse(_distanciaController.text);
     _astros.apelido = _apelidoController.text;
     await _controleAstros.inserirAstro(_astros);
+    print(
+        'Astro inserido: ${_astros.toMap()}'); // Adicionando um log para verificação
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _inserirAstro();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Dados cadastrados com sucesso!'),
-        ),
-      );
-      Navigator.of(context).pop(); // Adicionado parênteses aqui
+      _inserirAstro().then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Dados cadastrados com sucesso!'),
+          ),
+        );
+        Navigator.of(context).pop(); // Navegar de volta para a tela principal
+      });
     }
   }
 
@@ -177,8 +170,4 @@ class _TelaAstrosState extends State<TelaAstros> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(home: TelaAstros()));
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:planetario/controles/controle_astros.dart';
+import 'package:planetario/modelos/astros.dart';
 import 'package:planetario/telas/tela_astros.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final controleAstros = ControleAstros();
+  await controleAstros
+      .deletarBancoDeDados(); // Adicione isso temporariamente para recriar o banco
   runApp(const MyApp());
 }
 
@@ -11,14 +17,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Título do aplicativo
       title: 'Planetário',
       debugShowCheckedModeBanner: false,
-      // Define o tema do aplicativo usando Material Design 3
       theme: ThemeData(
         useMaterial3: true,
       ),
-      // Define a página inicial do aplicativo
       home: const MyHomePage(
         title: 'Meu Planetário',
       ),
@@ -27,10 +30,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-    required this.title,
-  });
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -39,34 +39,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ControleAstros _controleAstros = ControleAstros();
+  List<Astro> _astros = [];
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              '''
-            Saudações usúario,
-            Esse é um pequeno APP criado para 
-            o meu curso Talento Tech. 😁
-            ''',
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _incluirAstro(context);
-        },
-        child: const Icon(Icons.public_outlined),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _lerAstros();
+  }
+
+  Future<void> _lerAstros() async {
+    final resultado = await _controleAstros.lerAstros();
+    setState(() {
+      _astros = resultado;
+      print('Dados lidos: $_astros');
+    });
   }
 
   void _incluirAstro(BuildContext context) {
@@ -74,6 +61,35 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => const TelaAstros(),
+      ),
+    ).then((value) {
+      _lerAstros(); // Recarregar a lista de astros após inserir um novo astro
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: ListView.builder(
+        itemCount: _astros.length,
+        itemBuilder: (context, index) {
+          final astro = _astros[index];
+          return ListTile(
+            title: Text(astro.nome),
+            subtitle: Text(
+                'Distância: ${astro.distancia} km\nCircunferência: ${astro.tamanho} km'),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _incluirAstro(context);
+        },
+        child: const Icon(Icons.public_outlined),
       ),
     );
   }
