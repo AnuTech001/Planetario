@@ -1,9 +1,9 @@
-// Criação da classe Astros, responsável por armazenar os dados referentes aos astros
 class Astro {
   String? id; // Identificador opcional
   String nome; // Nome do astro
   double tamanho; // Tamanho ou circunferência do astro
   double distancia; // Distância do astro em relação à sua estrela
+  String? estrela; // Nome da estrela mãe
   String? apelido; // Apelido: Nome alternativo para o astro
 
   // Construtor da classe Astro
@@ -12,6 +12,7 @@ class Astro {
     required this.nome,
     required this.tamanho,
     required this.distancia,
+    this.estrela,
     this.apelido,
   });
 
@@ -20,6 +21,7 @@ class Astro {
       : nome = '',
         tamanho = 0.0,
         distancia = 0.0,
+        estrela = '',
         apelido = '';
 
   // Criação de um objeto Astro a partir de um mapa de dados
@@ -29,6 +31,7 @@ class Astro {
       nome: map['nome'],
       tamanho: map['tamanho'],
       distancia: map['distancia'],
+      estrela: map['estrela'],
       apelido: map['apelido'],
     );
   }
@@ -40,6 +43,7 @@ class Astro {
       'nome': nome,
       'tamanho': tamanho,
       'distancia': distancia,
+      'estrela': estrela,
       'apelido': apelido,
     };
   }

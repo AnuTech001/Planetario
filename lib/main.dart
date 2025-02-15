@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Center(),
+          title: Center(child: Text('Confirmação de exclusão')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -141,13 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
           final astro = _astros[index];
           if (kDebugMode) {
             print(
-              'Exibindo astro: ${astro.nome}\nDistância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido!}',
+              'Exibindo astro: ${astro.nome}\nDistância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nEstrela Mãe: ${astro.estrela}\nApelido: ${astro.apelido}',
             );
           }
           return ListTile(
             title: Text(astro.nome),
             subtitle: Text(
-              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nApelido: ${astro.apelido!}',
+              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nEstrela Mãe: ${astro.estrela}\nApelido: ${astro.apelido}',
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete),

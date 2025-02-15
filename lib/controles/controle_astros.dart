@@ -23,8 +23,9 @@ class ControleAstros {
     }
     return await openDatabase(
       caminho,
-      version: 1,
+      version: 2,
       onCreate: _criarBD,
+      onUpgrade: _atualizarBD,
     );
   }
 
@@ -36,12 +37,24 @@ class ControleAstros {
         nome TEXT NOT NULL,
         tamanho REAL NOT NULL,
         distancia REAL NOT NULL,
+        estrela TEXT,
         apelido TEXT
       );
     ''';
     await bd.execute(sql);
     if (kDebugMode) {
       print("Tabela astros criada com sucesso.");
+    }
+  }
+
+  // Função de migração para atualizar a tabela existente
+  Future<void> _atualizarBD(
+      Database bd, int antigaVersao, int novaVersao) async {
+    if (antigaVersao < 2) {
+      await bd.execute('ALTER TABLE astros ADD COLUMN estrela TEXT;');
+      if (kDebugMode) {
+        print('Tabela astros atualizada com sucesso.');
+      }
     }
   }
 

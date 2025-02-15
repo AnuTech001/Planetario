@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
@@ -24,6 +22,7 @@ class _TelaAstrosState extends State<TelaAstros> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _tamanhoController = TextEditingController();
   final TextEditingController _distanciaController = TextEditingController();
+  final TextEditingController _estrelaController = TextEditingController();
   final TextEditingController _apelidoController = TextEditingController();
 
   // Instância do controle de astros e do modelo de astro
@@ -41,6 +40,7 @@ class _TelaAstrosState extends State<TelaAstros> {
     _nomeController.dispose();
     _tamanhoController.dispose();
     _distanciaController.dispose();
+    _estrelaController.dispose();
     _apelidoController.dispose();
     super.dispose();
   }
@@ -51,6 +51,7 @@ class _TelaAstrosState extends State<TelaAstros> {
     _astros.tamanho = double.parse(_tamanhoController.text);
     _astros.distancia = double.parse(_distanciaController.text);
     _astros.apelido = _apelidoController.text;
+    _astros.estrela = _estrelaController.text;
     await _controleAstros.inserirAstro(_astros);
     if (kDebugMode) {
       // Log para verificação dos dados inseridos
@@ -63,11 +64,13 @@ class _TelaAstrosState extends State<TelaAstros> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _inserirAstro().then((_) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Dados cadastrados com sucesso!'),
           ),
         );
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pop(); // Navegar de volta para a tela principal
         widget.onData();
         if (kDebugMode) {
@@ -161,6 +164,27 @@ class _TelaAstrosState extends State<TelaAstros> {
                   },
                   onSaved: (value) {
                     _astros.distancia = double.parse(value!);
+                  },
+                ),
+                const SizedBox(height: 16),
+                // Campo de texto para estrela mãe
+                TextFormField(
+                  controller: _estrelaController,
+                  decoration: InputDecoration(
+                    labelText: 'Estrela Mãe',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length <= 2) {
+                      return 'Por favor, insira o nome da estrela\nCom três ou mais letras';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _astros.estrela = value!;
                   },
                 ),
                 const SizedBox(height: 16),
