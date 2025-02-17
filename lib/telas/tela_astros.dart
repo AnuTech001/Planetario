@@ -4,9 +4,11 @@ import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 
 class TelaAstros extends StatefulWidget {
+  final Astro astros;
   final Function() onData;
   const TelaAstros({
     super.key,
+    required this.astros,
     required this.onData,
   });
 
@@ -27,11 +29,17 @@ class _TelaAstrosState extends State<TelaAstros> {
 
   // Instância do controle de astros e do modelo de astro
   final ControleAstros _controleAstros = ControleAstros();
-  final Astro _astros = Astro.vazio();
+  late Astro _astros;
 
   @override
   void initState() {
     super.initState();
+    _astros = widget.astros;
+    _nomeController.text = _astros.nome;
+    _tamanhoController.text = _astros.tamanho.toString();
+    _distanciaController.text = _astros.distancia.toString();
+    _estrelaController.text = _astros.estrela!;
+    _apelidoController.text = _astros.apelido ?? '';
   }
 
   @override

@@ -44,10 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _lerAstros();
+    _atualizarAstros();
   }
 
-  Future<void> _lerAstros() async {
+  Future<void> _atualizarAstros() async {
     final resultado = await _controleAstros.lerAstros();
     setState(() {
       _astros = resultado;
@@ -64,11 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => TelaAstros(
+          astros: Astro.vazio(),
           onData: () {},
         ),
       ),
     ).then((value) {
-      _lerAstros();
+      _atualizarAstros();
       if (kDebugMode) {
         print(
           'Novo astro incluído e lista recarregada.',
@@ -79,7 +80,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _excluirAstro(int id) async {
     await _controleAstros.excluirAstro(id);
-    _lerAstros();
+    _atualizarAstros();
+    if (kDebugMode) {
+      print('Item excluído com sucesso');
+    }
+  }
+
+  void _alterarAstros(BuildContext context, Astro astro) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TelaAstros(
+          astros: astro,
+          onData: () {
+            _atualizarAstros();
+          },
+        ),
+      ),
+    ).then((value) {
+      _atualizarAstros();
+      if (kDebugMode) {
+        print(
+          'Novo astro incluído e lista recarregada.',
+        );
+      }
+    });
   }
 
   void _confirmarExclusao(BuildContext context, Astro astro) {
@@ -87,14 +112,13 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Center(child: Text('Confirmação de exclusão')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Icon(
                 Icons.warning_outlined,
                 size: 48,
-                color: Colors.red,
+                color: Colors.black,
               ),
               SizedBox(height: 16),
               Center(
@@ -140,20 +164,33 @@ class _MyHomePageState extends State<MyHomePage> {
         itemBuilder: (context, index) {
           final astro = _astros[index];
           if (kDebugMode) {
-            print(
-              'Exibindo astro: ${astro.nome}\nDistância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nEstrela Mãe: ${astro.estrela}\nApelido: ${astro.apelido}',
-            );
+            print('Exibindo astro: ${astro.nome}\n'
+                'Distância: ${astro.distancia} Km\n'
+                'Circunferência: ${astro.tamanho} Km\n'
+                'Estrela Mãe: ${astro.estrela}\n'
+                'Apelido: ${astro.apelido}');
           }
           return ListTile(
-            title: Text(astro.nome),
-            subtitle: Text(
-              'Distância: ${astro.distancia} Km\nCircunferência: ${astro.tamanho} Km\nEstrela Mãe: ${astro.estrela}\nApelido: ${astro.apelido}',
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _confirmarExclusao(context, astro),
-            ),
-          );
+              title: Text(astro.nome),
+              subtitle: Text(
+                'Distância: ${astro.distancia} Km\n'
+                'Circunferência: ${astro.tamanho} Km\n'
+                'Estrela Mãe: ${astro.estrela}\n'
+                'Apelido: ${astro.apelido}',
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () => _alterarAstros(context, astro),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _confirmarExclusao(context, astro),
+                  ),
+                ],
+              ));
         },
       ),
       floatingActionButton: FloatingActionButton(
