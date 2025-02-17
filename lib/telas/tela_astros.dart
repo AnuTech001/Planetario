@@ -6,6 +6,7 @@ import 'package:planetario/modelos/astros.dart';
 class TelaAstros extends StatefulWidget {
   final Astro astros;
   final Function() onData;
+
   const TelaAstros({
     super.key,
     required this.astros,
@@ -35,11 +36,15 @@ class _TelaAstrosState extends State<TelaAstros> {
   void initState() {
     super.initState();
     _astros = widget.astros;
+    // Preenchendo os controladores com os valores do astro
     _nomeController.text = _astros.nome;
     _tamanhoController.text = _astros.tamanho.toString();
     _distanciaController.text = _astros.distancia.toString();
     _estrelaController.text = _astros.estrela!;
     _apelidoController.text = _astros.apelido ?? '';
+    if (kDebugMode) {
+      print('Valores iniciais do astro carregados: ${_astros.toMap()}');
+    }
   }
 
   @override
@@ -67,25 +72,59 @@ class _TelaAstrosState extends State<TelaAstros> {
     }
   }
 
+  // Método para alterar um astro no banco de dados
+  Future<void> _alterarAstro() async {
+    _astros.nome = _nomeController.text;
+    _astros.tamanho = double.parse(_tamanhoController.text);
+    _astros.distancia = double.parse(_distanciaController.text);
+    _astros.apelido = _apelidoController.text;
+    _astros.estrela = _estrelaController.text;
+    await _controleAstros.alterarAstro(_astros);
+    if (kDebugMode) {
+      // Log para verificação dos dados alterados
+      print('Astro alterado: ${_astros.toMap()}');
+    }
+  }
+
   // Método para submeter o formulário
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _inserirAstro().then((_) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Dados cadastrados com sucesso!'),
-          ),
-        );
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pop(); // Navegar de volta para a tela principal
-        widget.onData();
-        if (kDebugMode) {
-          // Log para verificar a navegação de volta
-          print('Navegando de volta para a tela principal após cadastro.');
-        }
-      });
+      if (_astros.id != null) {
+        // Se o astro já tem um ID, alterá-lo
+        _alterarAstro().then((_) {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Dados alterados com sucesso!'),
+            ),
+          );
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop(); // Navegar de volta para a tela principal
+          widget.onData();
+          if (kDebugMode) {
+            // Log para verificar a navegação de volta
+            print('Navegando de volta para a tela principal após alteração.');
+          }
+        });
+      } else {
+        // Caso contrário, inserir um novo astro
+        _inserirAstro().then((_) {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Dados cadastrados com sucesso!'),
+            ),
+          );
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop(); // Navegar de volta para a tela principal
+          widget.onData();
+          if (kDebugMode) {
+            // Log para verificar a navegação de volta
+            print('Navegando de volta para a tela principal após cadastro.');
+          }
+        });
+      }
     }
   }
 
@@ -213,7 +252,7 @@ class _TelaAstrosState extends State<TelaAstros> {
                 // Botão para submeter o formulário
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_outlined,
                   ),
                 ),

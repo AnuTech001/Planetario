@@ -51,10 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final resultado = await _controleAstros.lerAstros();
     setState(() {
       _astros = resultado;
+      // Debug print
       if (kDebugMode) {
-        print(
-          'Dados lidos: $_astros',
-        );
+        print('Dados lidos: $_astros');
       }
     });
   }
@@ -70,10 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ).then((value) {
       _atualizarAstros();
+      // Debug print
       if (kDebugMode) {
-        print(
-          'Novo astro incluído e lista recarregada.',
-        );
+        print('Novo astro incluído e lista recarregada.');
       }
     });
   }
@@ -81,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _excluirAstro(int id) async {
     await _controleAstros.excluirAstro(id);
     _atualizarAstros();
+    // Debug print
     if (kDebugMode) {
       print('Item excluído com sucesso');
     }
@@ -99,10 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ).then((value) {
       _atualizarAstros();
+      // Debug print
       if (kDebugMode) {
-        print(
-          'Novo astro incluído e lista recarregada.',
-        );
+        print('Novo astro incluído e lista recarregada.');
       }
     });
   }
@@ -141,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 _excluirAstro(int.parse(astro.id!));
                 Navigator.of(context).pop();
+                // Debug print
                 if (kDebugMode) {
                   print('Astro excluído: ${astro.id}');
                 }
@@ -163,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: _astros.length,
         itemBuilder: (context, index) {
           final astro = _astros[index];
+          // Debug print
           if (kDebugMode) {
             print('Exibindo astro: ${astro.nome}\n'
                 'Distância: ${astro.distancia} Km\n'
