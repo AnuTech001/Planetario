@@ -261,6 +261,7 @@ class _TelaAstrosState extends State<TelaAstros> {
           ),
         ),
       ),
+      backgroundColor: Colors.black,
     );
   }
 }

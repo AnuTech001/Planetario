@@ -19,7 +19,12 @@ class MyApp extends StatelessWidget {
       title: 'Planetário',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primarySwatch: Colors.cyan,
+        fontFamily: 'Times',
         useMaterial3: true,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
       ),
       home: const MyHomePage(
         title: 'Meu Planetário',
@@ -157,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        elevation: 3,
       ),
       body: ListView.builder(
         itemCount: _astros.length,
@@ -171,26 +177,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 'Apelido: ${astro.apelido}');
           }
           return ListTile(
-              title: Text(astro.nome),
-              subtitle: Text(
-                'Circunferência: ${astro.tamanho} Km\n'
-                'Distância: ${astro.distancia} Km\n'
-                'Estrela Mãe: ${astro.estrela}\n'
-                'Apelido: ${astro.apelido}',
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => _alterarAstros(context, astro),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => _confirmarExclusao(context, astro),
-                  ),
-                ],
-              ));
+            title: Text(astro.nome),
+            subtitle: Text(
+              'Circunferência: ${astro.tamanho} Km\n'
+              'Distância: ${astro.distancia} Km\n'
+              'Estrela Mãe: ${astro.estrela}\n'
+              'Apelido: ${astro.apelido}',
+              style:
+                  TextStyle(color: Colors.white), // Define a cor do texto aqui
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => _alterarAstros(context, astro),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => _confirmarExclusao(context, astro),
+                ),
+              ],
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -199,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: const Icon(Icons.public_outlined),
       ),
+      backgroundColor: Colors.black,
     );
   }
 }
