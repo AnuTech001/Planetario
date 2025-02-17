@@ -165,16 +165,16 @@ class _MyHomePageState extends State<MyHomePage> {
           // Debug print
           if (kDebugMode) {
             print('Exibindo astro: ${astro.nome}\n'
+                'Circunferência: ${astro.tamamho} Km\n'
                 'Distância: ${astro.distancia} Km\n'
-                'Circunferência: ${astro.tamanho} Km\n'
                 'Estrela Mãe: ${astro.estrela}\n'
                 'Apelido: ${astro.apelido}');
           }
           return ListTile(
               title: Text(astro.nome),
               subtitle: Text(
+                'Circunferência: ${astro.tamamho} Km\n'
                 'Distância: ${astro.distancia} Km\n'
-                'Circunferência: ${astro.tamanho} Km\n'
                 'Estrela Mãe: ${astro.estrela}\n'
                 'Apelido: ${astro.apelido}',
               ),
