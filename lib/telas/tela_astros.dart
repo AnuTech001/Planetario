@@ -133,8 +133,11 @@ class _TelaAstrosState extends State<TelaAstros> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Cadastrar Astro'),
-        elevation: 3,
+        backgroundColor: Colors.black,
+        title: Text(
+          'Cadastro de Planetas',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
