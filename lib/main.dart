@@ -111,6 +111,12 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: BorderSide(
+              color: Color(0xff00FF00),
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -154,7 +160,9 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               child: Text(
                 'Cancelar',
-                style: TextStyle(color: Color(0xff00FF00)),
+                style: TextStyle(
+                  color: Color(0xff00FF00),
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

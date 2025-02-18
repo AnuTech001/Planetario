@@ -25,8 +25,8 @@ class Astro {
   // Construtor vazio
   Astro.vazio()
       : nome = '',
-        tamanho = 0.0,
-        distancia = 0.0,
+        tamanho = 0,
+        distancia = 0,
         estrela = '',
         apelido = '' {
     if (kDebugMode) {

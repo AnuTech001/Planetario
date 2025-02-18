@@ -87,7 +87,7 @@ class _TelaAstrosState extends State<TelaAstros> {
   }
 
   // Método para submeter o formulário
-  void _submitForm() {
+  void _submitForm(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       if (_astros.id != null) {
@@ -134,10 +134,21 @@ class _TelaAstrosState extends State<TelaAstros> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.black,
-        title: Text(
-          'Cadastro de Planetas',
-          style: TextStyle(color: Colors.white),
+        iconTheme: IconThemeData(
+          color: Color(0xff0000FF), // Cor do ícone
         ),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Menu de Cadastro',
+              style: TextStyle(
+                color: Color(0xff00FF00), // Cor do texto
+              ),
+            ),
+          ],
+        ),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
@@ -147,15 +158,22 @@ class _TelaAstrosState extends State<TelaAstros> {
             child: Column(
               children: [
                 // Campo de texto para nome
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: _nomeController,
                   decoration: InputDecoration(
                     labelText: 'Nome',
+                    labelStyle: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length <= 2) {
                       return 'Por favor, insira o nome do planeta\nCom três ou mais letras';
@@ -172,12 +190,18 @@ class _TelaAstrosState extends State<TelaAstros> {
                   controller: _tamanhoController,
                   decoration: InputDecoration(
                     labelText: 'Circunferência (Km)',
+                    labelStyle: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   keyboardType: TextInputType.number,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira a circunferência do planeta';
@@ -197,15 +221,21 @@ class _TelaAstrosState extends State<TelaAstros> {
                   controller: _distanciaController,
                   decoration: InputDecoration(
                     labelText: 'Distância de sua estrela (Km)',
+                    labelStyle: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   keyboardType: TextInputType.number,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a distância do planeta\nem relação a sua estrela';
+                      return 'Por favor, insira a circunferência do planeta';
                     }
                     if (double.tryParse(value) == null) {
                       return 'Por favor, apenas números são aceitos';
@@ -213,7 +243,7 @@ class _TelaAstrosState extends State<TelaAstros> {
                     return null;
                   },
                   onSaved: (value) {
-                    _astros.distancia = double.parse(value!);
+                    _astros.tamanho = double.parse(value!);
                   },
                 ),
                 const SizedBox(height: 16),
@@ -222,19 +252,25 @@ class _TelaAstrosState extends State<TelaAstros> {
                   controller: _estrelaController,
                   decoration: InputDecoration(
                     labelText: 'Estrela Mãe',
+                    labelStyle: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length <= 2) {
-                      return 'Por favor, insira o nome da estrela\nCom três ou mais letras';
+                      return 'Por favor, insira o nome do planeta\nCom três ou mais letras';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _astros.estrela = value!;
+                    _astros.nome = value!;
                   },
                 ),
                 const SizedBox(height: 16),
@@ -246,17 +282,33 @@ class _TelaAstrosState extends State<TelaAstros> {
                   },
                   decoration: InputDecoration(
                     labelText: 'Apelido',
+                    labelStyle: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  style: TextStyle(color: Colors.white),
                 ),
                 const SizedBox(height: 20.0),
                 // Botão para submeter o formulário
                 ElevatedButton(
-                  onPressed: _submitForm,
+                  onPressed: () {
+                    _submitForm(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black, // Cor de fundo do botão
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: Color(0xff00FF00),
+                      ),
+                    ),
+                  ),
                   child: const Icon(
                     Icons.add_outlined,
+                    color: Color(0xff00FF00),
                   ),
                 ),
               ],
@@ -264,6 +316,7 @@ class _TelaAstrosState extends State<TelaAstros> {
           ),
         ),
       ),
+      backgroundColor: Colors.black,
     );
   }
 }
