@@ -2,7 +2,7 @@ name: planetario
 description: "A new Flutter project."
 publish_to: 'none' # Remova esta linha se você deseja publicar para o pub.dev
 
-version: 2.3.3-beta+1
+version: 3.0.0-beta+1
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
