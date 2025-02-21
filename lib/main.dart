@@ -221,9 +221,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // ignore: unused_element
   void _playMusic() async {
-    await _audioPlayer.play(
-      DeviceFileSource('assets/audio/musica.mp3'),
-    );
+    if (kDebugMode) {
+      print('Tentando tocar música...');
+    }
+    await _audioPlayer.play(DeviceFileSource('assets/audio/musica.mp3'));
+    if (kDebugMode) {
+      print('Música tocando...');
+    }
   }
 
   @override
