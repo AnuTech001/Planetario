@@ -44,11 +44,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final ControleAstros _controleAstros = ControleAstros();
   final AudioPlayer _audioPlayer = AudioPlayer();
   List<Astro> _astros = [];
+  // ignore: unused_field
+  late Future<void> _futureAstros;
 
   @override
   void initState() {
     super.initState();
-    _atualizarAstros();
+    _futureAstros = _atualizarAstros();
   }
 
   Future<void> _atualizarAstros() async {
@@ -219,14 +221,28 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // ignore: unused_element
   void _playMusic() async {
     if (kDebugMode) {
       print('Tentando tocar música...');
     }
-    await _audioPlayer.play(DeviceFileSource('assets/audio/musica.mp3'));
+    try {
+      await _audioPlayer.setSource(AssetSource('audio/musica.mp3'));
+      _audioPlayer.setReleaseMode(ReleaseMode.loop); // Configurar para repetir
+      await _audioPlayer.resume();
+      if (kDebugMode) {
+        print('Música tocando...');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Erro ao carregar o arquivo de música: $e');
+      }
+    }
+  }
+
+  void _pauseMusic() async {
+    await _audioPlayer.pause();
     if (kDebugMode) {
-      print('Música tocando...');
+      print('Música pausada');
     }
   }
 
@@ -254,70 +270,117 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         elevation: 0,
       ),
-      body: ListView.builder(
-        itemCount: _astros.length,
-        itemBuilder: (context, index) {
-          final astro = _astros[index];
-          // Debug print
-          if (kDebugMode) {
-            print('Exibindo astro: ${astro.nome}\n'
-                'Circunferência: ${astro.tamanho} Km\n'
-                'Distância: ${astro.distancia} Km\n'
-                'Estrela Mãe: ${astro.estrela}\n'
-                'Apelido: ${astro.apelido}');
+      body: FutureBuilder(
+        future: _futureAstros, // Usar o Future inicializado no initState
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Erro ao carregar os dados'));
+          } else {
+            return ListView.builder(
+              itemCount: _astros.length,
+              itemBuilder: (context, index) {
+                final astro = _astros[index];
+                // Debug print
+                if (kDebugMode) {
+                  print('Exibindo astro: ${astro.nome}\n'
+                      'Circunferência: ${astro.tamanho} Km\n'
+                      'Distância: ${astro.distancia} Km\n'
+                      'Estrela Mãe: ${astro.estrela}\n'
+                      'Apelido: ${astro.apelido}');
+                }
+                return ListTile(
+                  title: Text(
+                    astro.nome,
+                    style: TextStyle(
+                      color: Color(0xff00FF00),
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Circunferência: ${astro.tamanho} Km\n'
+                    'Distância: ${astro.distancia} Km\n'
+                    'Estrela Mãe: ${astro.estrela}\n'
+                    'Apelido: ${astro.apelido}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Color(0xff0000FF),
+                        ),
+                        onPressed: () => _alterarAstros(context, astro),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Color(0xffFF0000),
+                        ),
+                        onPressed: () => _confirmarExclusao(context, astro),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
           }
-          return ListTile(
-              title: Text(
-                astro.nome,
-                style: TextStyle(
-                  color: Color(0xff00FF00),
-                ),
-              ),
-              subtitle: Text(
-                'Circunferência: ${astro.tamanho} Km\n'
-                'Distância: ${astro.distancia} Km\n'
-                'Estrela Mãe: ${astro.estrela}\n'
-                'Apelido: ${astro.apelido}',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Color(0xff0000FF),
-                    ),
-                    onPressed: () => _alterarAstros(context, astro),
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Color(0xffFF0000),
-                    ),
-                    onPressed: () => _confirmarExclusao(context, astro),
-                  ),
-                ],
-              ));
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _incluirAstro(context);
-        },
-        backgroundColor: Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(
-            color: Color(0xff00FF00),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _playMusic,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: BorderSide(
+                color: Color(0xff00FF00),
+              ),
+            ),
+            child: const Icon(
+              Icons.music_note,
+              color: Color(0xff0000FF),
+            ),
           ),
-        ),
-        child: const Icon(
-          Icons.public_outlined,
-          color: Color(0xff00FF00),
-        ),
+          SizedBox(height: 8.0),
+          FloatingActionButton(
+            onPressed: _pauseMusic,
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: BorderSide(
+                color: Color(0xff00FF00),
+              ),
+            ),
+            child: const Icon(
+              Icons.pause,
+              color: Color(0xffFF0000),
+            ),
+          ),
+          SizedBox(height: 8.0),
+          FloatingActionButton(
+            onPressed: () {
+              _incluirAstro(context);
+            },
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              side: BorderSide(
+                color: Color(0xff00FF00),
+              ),
+            ),
+            child: const Icon(
+              Icons.public_outlined,
+              color: Color(0xff00FF00),
+            ),
+          ),
+        ],
       ),
       backgroundColor: Colors.black,
     );
