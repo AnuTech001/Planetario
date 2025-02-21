@@ -334,50 +334,71 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: _playMusic,
-            backgroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Color(0xff00FF00),
+          SizedBox(
+            width: 40.0, // Defina a largura desejada
+            height: 40.0, // Defina a altura desejada
+            child: FloatingActionButton(
+              onPressed: _playMusic,
+              backgroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Color(0xff00FF00),
+                  width:
+                      2.0, // Altere este valor para ajustar a largura da borda
+                ),
               ),
-            ),
-            child: const Icon(
-              Icons.music_note,
-              color: Color(0xff0000FF),
+              child: const Icon(
+                Icons.music_note,
+                color: Color(0xff0000FF),
+                size: 30.0, // Altere este valor para ajustar o tamanho do ícone
+              ),
             ),
           ),
           SizedBox(height: 8.0),
-          FloatingActionButton(
-            onPressed: _pauseMusic,
-            backgroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Color(0xff00FF00),
+          SizedBox(
+            width: 40.0, // Defina a largura desejada
+            height: 40.0, // Defina a altura desejada
+            child: FloatingActionButton(
+              onPressed: _pauseMusic,
+              backgroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Color(0xff00FF00),
+                  width:
+                      2.0, // Altere este valor para ajustar a largura da borda
+                ),
               ),
-            ),
-            child: const Icon(
-              Icons.pause,
-              color: Color(0xffFF0000),
+              child: const Icon(
+                Icons.pause,
+                color: Color(0xffFF0000),
+                size: 30.0, // Altere este valor para ajustar o tamanho do ícone
+              ),
             ),
           ),
           SizedBox(height: 8.0),
-          FloatingActionButton(
-            onPressed: () {
-              _incluirAstro(context);
-            },
-            backgroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Color(0xff00FF00),
+          SizedBox(
+            width: 40.0, // Defina a largura desejada
+            height: 40.0, // Defina a altura desejada
+            child: FloatingActionButton(
+              onPressed: () {
+                _incluirAstro(context);
+              },
+              backgroundColor: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Color(0xff00FF00),
+                  width:
+                      2.0, // Altere este valor para ajustar a largura da borda
+                ),
               ),
-            ),
-            child: const Icon(
-              Icons.public_outlined,
-              color: Color(0xff00FF00),
+              child: const Icon(
+                Icons.public_outlined,
+                color: Color(0xff00FF00),
+                size: 30.0, // Altere este valor para ajustar o tamanho do ícone
+              ),
             ),
           ),
         ],
