@@ -265,7 +265,7 @@ class _TelaAstrosState extends State<TelaAstros> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length <= 2) {
-                      return 'Por favor, insira o nome do planeta\nCom três ou mais letras';
+                      return 'Por favor, insira o nome da estrela\nCom três ou mais letras';
                     }
                     return null;
                   },
