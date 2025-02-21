@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:planetario/controles/controle_astros.dart';
 import 'package:planetario/modelos/astros.dart';
 import 'package:planetario/telas/tela_astros.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Planetário',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Times',
+        textTheme: GoogleFonts.orbitronTextTheme(),
         useMaterial3: true,
       ),
       home: const MyHomePage(
@@ -40,6 +42,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final ControleAstros _controleAstros = ControleAstros();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   List<Astro> _astros = [];
 
   @override
@@ -157,34 +160,69 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           backgroundColor: Colors.black, // Mover para fora do Column
           actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Cancelar',
-                style: TextStyle(
-                  color: Color(0xff00FF00),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.cancel,
+                        color: Color(0xff00FF00),
+                      ),
+                      SizedBox(width: 8), // Espaçamento entre ícone e texto
+                      Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          color: Color(0xff00FF00),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Excluir',
-                style: TextStyle(color: Color(0xffFF0000)),
-              ),
-              onPressed: () {
-                _excluirAstro(int.parse(astro.id!));
-                Navigator.of(context).pop();
-                // Debug print
-                if (kDebugMode) {
-                  print('Astro excluído: ${astro.id}');
-                }
-              },
-            ),
+                SizedBox(height: 4), // Espaçamento entre os botões
+                TextButton(
+                  onPressed: () {
+                    _excluirAstro(int.parse(astro.id!));
+                    Navigator.of(context).pop();
+                    // Debug print
+                    if (kDebugMode) {
+                      print('Astro excluído: ${astro.id}');
+                    }
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.delete_forever_outlined,
+                        color: Color(0xffFF0000),
+                      ),
+                      SizedBox(width: 4), // Espaçamento entre ícone e texto
+                      Text(
+                        'Excluir',
+                        style: TextStyle(
+                          color: Color(0xffFF0000),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
           ],
         );
       },
+    );
+  }
+
+  // ignore: unused_element
+  void _playMusic() async {
+    await _audioPlayer.play(
+      DeviceFileSource('assets/audio/musica.mp3'),
     );
   }
 

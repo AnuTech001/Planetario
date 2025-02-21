@@ -204,10 +204,10 @@ class _TelaAstrosState extends State<TelaAstros> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a circunferência do planeta';
+                      return 'Por favor, insira a circunferência do\nplaneta';
                     }
                     if (double.tryParse(value) == null) {
-                      return 'Por favor, apenas números são aceitos';
+                      return 'Por favor, apenas números são\naceitos';
                     }
                     return null;
                   },
@@ -235,10 +235,10 @@ class _TelaAstrosState extends State<TelaAstros> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a circunferência do planeta';
+                      return 'Por favor, insira a distância do\nplaneta em relação a sua estrela';
                     }
                     if (double.tryParse(value) == null) {
-                      return 'Por favor, apenas números são aceitos';
+                      return 'Por favor, apenas números são\naceitos';
                     }
                     return null;
                   },
